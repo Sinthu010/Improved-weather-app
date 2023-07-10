@@ -67,6 +67,12 @@
         text-transform: capitalize;
       }
 
+      .description {
+        font-size: 25px;
+        padding: 10px;
+        color: rgb(75, 75, 75);
+      }
+
       .main-values {
         color: black;
         padding: 10px;
@@ -119,25 +125,25 @@
         <br />Currently <span id="temp-0">21</span>° in
         <span id="city" class="city">Tokyo</span>
       </h1>
-      <span id="icon" class="icon">🌤</span>
-      <h3 id="description" class="description">clear sky</h3>
+      <span id="icon0" class="icon">🌤</span
+      ><span id="description" class="description">clear sky</span>
 
       <div class="weather-box">
-        <div class="day">🌧 Tomorrow</div>
-        <span class="value" id="temp-1-min">10</span>°/
+        <div class="day" id="tomorrow">Tomorrow</div>
+        <span id="icon1">🌧</span><span class="value" id="temp-1-min">10</span>°/
         <strong class="value" id="temp-1-max">22</strong>°
       </div>
 
       <div class="weather-box">
-        <div class="day">🌥 Saturday</div>
-        <span class="value" id="temp-2-min">15</span>° /
-        <strong class="value" id="temp-2-max">17</strong>°
+        <div class="day" id="day-after">Day after Tomorrow</div>
+        <span id="icon2">🌥 </span><span class="value" id="temp-2-min">15</span>°
+        / <strong class="value" id="temp-2-max">17</strong>°
       </div>
 
       <div class="weather-box">
-        <div class="day">☀️ Sunday</div>
-        <span class="value" id="temp-3-min">25</span>° /
-        <strong class="value" id="temp-3-max">28</strong>°
+        <div class="day" id="three-days-after">3 Days from Today</div>
+        <span id="icon3">☀️</span><span class="value" id="temp-3-min">25</span>°
+        / <strong class="value" id="temp-3-max">28</strong>°
       </div>
 
       <button>Change city</button>
@@ -145,6 +151,9 @@
       <div class="author">Coded by Sinthuja Muthulingam</div>
     </section>
     <script>
+      // set default to API URL with london
+      //call all functions called when button is pressed
+
       function getTemp(response) {
         //today
         //console.log(response.data.daily[0].temperature.day);
@@ -190,12 +199,23 @@
 
       function getIcon(response) {
         //console.log(response.data.daily[0].condition.icon_url);
-        let iconURL = response.data.daily[0].condition.icon_url;
-        let iconElement = document.querySelector("#icon");
-        let imgElement = document.createElement("img");
-        imgElement.src = iconURL;
-        iconElement.innerHTML = "";
-        iconElement.appendChild(imgElement);
+        //let icon0URL = response.data.daily[0].condition.icon_url;
+        //let icon0Element = document.querySelector("#icon");
+        //let img0Element = document.createElement("img");
+        //img0Element.src = iconURL;
+        //icon0Element.innerHTML = "";
+        //icon0Element.appendChild(imgElement);
+        const icon0URL = response.data.daily[0].condition.icon_url;
+        document.querySelector("#icon0").innerHTML = `<img src="${icon0URL}">`;
+        //tomorrow icon
+        const icon1URL = response.data.daily[1].condition.icon_url;
+        document.querySelector("#icon1").innerHTML = `<img src="${icon1URL}">`;
+        //day-after-tomorrow
+        const icon2URL = response.data.daily[2].condition.icon_url;
+        document.querySelector("#icon2").innerHTML = `<img src="${icon2URL}">`;
+        //3 days after
+        const icon3URL = response.data.daily[3].condition.icon_url;
+        document.querySelector("#icon3").innerHTML = `<img src="${icon3URL}">`;
       }
 
       function changeHeader() {
@@ -215,6 +235,56 @@
 
       let changeCityButton = document.querySelector("button");
       changeCityButton.addEventListener("click", changeHeader);
+
+      let now = new Date();
+      let day_num = now.getDay();
+      //day_num = 5;
+
+      tomorrow = day_num + 1;
+      day_after = day_num + 2;
+      three_days_after = day_num + 3;
+
+      let days = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+      if (tomorrow <= 6) {
+        //console.log(days[tomorrow]);
+        document.querySelector("#tomorrow").innerHTML = days[tomorrow];
+      } else {
+        tomorrow -= 7;
+        //console.log(days[tomorrow]);
+        document.querySelector("#tomorrow").innerHTML = days[tomorrow];
+      }
+      if (day_after <= 6) {
+        //console.log(days[day_after]);
+        document.querySelector("#day-after").innerHTML = days[day_after];
+      } else {
+        day_after -= 7;
+        //console.log(days[day_after]);
+        document.querySelector("#day-after").innerHTML = days[day_after];
+      }
+      if (three_days_after <= 6) {
+        //console.log(days[three_days_after]);
+        document.querySelector("#three-days-after").innerHTML =
+          days[three_days_after];
+      } else {
+        three_days_after -= 7;
+        //console.log(days[three_days_after]);
+        document.querySelector("#three-days-after").innerHTML =
+          days[three_days_after];
+      }
+
+      // if day_num is less than or equal to 6 then do
+      // 7 --> 0
+      // 8 --> 1
+      // 9 --> 2
+      //else do day_num - 7
     </script>
   </body>
 </html>
